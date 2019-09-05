@@ -8,7 +8,7 @@ import java.util.Scanner;
  *
  * Author Oscar Johanneson.
  */
-public class Main {
+public class App {
 
     //Make it possible to read input data from user.
     static Scanner scan = new Scanner(System.in);
@@ -49,17 +49,43 @@ public class Main {
 
     static void runHangMan(){
 
-
         String[] wordList = {"Book", "Table", "Mirror", "Headphones", "Flower"};
-        //take random word from Array and place it in randomWord
+        //take random word from Array and place it in randomWord.
+        // Random will generate a random index witch will be used to generate a random word from wordList
         int index = new Random().nextInt(wordList.length);
         String randomWord = wordList[index];
 
         HangMan hangMan = new HangMan(randomWord);
 
-        System.out.println(randomWord);
+        Scanner scannerInput = new Scanner(System.in);
 
+        //As long the amount of guesses is less then maxGuesses while-loop will run.
+        while(hangMan.getGuessAmount() < hangMan.getMaxGuesses()){
 
+            //Print in console.
+            System.out.println("Enter a letter or guess the whole word.");
+
+            //Take user inputs and store it in playerGuess.
+            String playerGuess = scannerInput.nextLine();
+            //If player enter the whole word.
+
+            if(playerGuess.equalsIgnoreCase(hangMan.getGameWord())){
+                System.out.println("Congratz! You guessed the correct word! The word is: " + hangMan.getGameWord());
+            }
+            else{
+                System.out.println("Sorry " + playerGuess + " is not the correct word!");
+                //Set guessAmount to increases with one.
+                hangMan.setGuessAmount();
+            }
+
+            //If player runs out of guesses this happens.
+            if(hangMan.getGuessAmount() == hangMan.getMaxGuesses()){
+                System.out.println("\nSorry! You lose!");
+                System.out.println("\nThe word you looking for is " + hangMan.getGameWord());
+            }
+
+        }
     }
-
 }
+
+
