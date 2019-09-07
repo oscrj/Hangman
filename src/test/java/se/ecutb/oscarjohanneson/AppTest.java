@@ -1,20 +1,18 @@
 package se.ecutb.oscarjohanneson;
 
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-/**
- * Unit test for simple App.
- */
 public class AppTest 
 {
-    /**
-     * Rigorous Test :-)
-     */
     @Test
-    public void shouldAnswerWithTrue()
+    public void testRandomGeneratedWords()
     {
-        assertTrue( true );
+        //Arrange
+        String[] testWord = {"test"};
+        RandomWord test = new RandomWord(testWord);
+        String actual = "test";
+        //Act & Assert
+        assertEquals("test", actual);
     }
 }

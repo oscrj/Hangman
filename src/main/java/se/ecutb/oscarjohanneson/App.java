@@ -1,5 +1,5 @@
 package se.ecutb.oscarjohanneson;
-import java.util.Random;
+
 import java.util.Scanner;
 /**
  * The game Hangman.
@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class App {
 
     //Make it possible to read input data from user.
-    static Scanner scan = new Scanner(System.in);
+    static Scanner scannerInput = new Scanner(System.in);
 
     public static void main(String[] args)  {
 
@@ -23,7 +23,7 @@ public class App {
             printMenu();
 
             //Get input data from user. Choose between start application or quit.
-            String startQuit = scan.nextLine();
+            String startQuit = scannerInput.nextLine();
             switch (startQuit) {
                 case "1":
                     runHangMan();
@@ -38,52 +38,73 @@ public class App {
             }
         }
     }
-
+    //Method to print menu.
     static void printMenu(){
         System.out.println("Welcome to the game Hangman\n");
         System.out.println("Make a selection:\n");
-        System.out.println("1. Start the application");
+        System.out.println("1. Start a new game");
         System.out.println("Q. Quit");
         System.out.print("Choice:");
     }
+    //method to run HangMan Game.
+    public static void runHangMan(){
 
-    static void runHangMan(){
-
-        String[] wordList = {"Book", "Table", "Mirror", "Headphones", "Flower"};
-        //take random word from Array and place it in randomWord.
-        // Random will generate a random index witch will be used to generate a random word from wordList
-        int index = new Random().nextInt(wordList.length);
-        String randomWord = wordList[index];
-
-        HangMan hangMan = new HangMan(randomWord);
-
-        Scanner scannerInput = new Scanner(System.in);
-
+        //String array containing words that is going to be randomly picked.
+        String[] wordList = {"Books", "Table", "Mirror", "Headphones", "Flower"};
+        //Create String playerGuess to store input data from player using Scanner.
+        String playerGuess;
+        //Instancing class RandomWord and give the constructor array wordList.
+        RandomWord randomWord = new RandomWord(wordList);
+        //Instancing class HangMan and call the method generateRandomWord in class RandomWord to get back a random word to play with.
+        HangMan hangMan = new HangMan(randomWord.generateRandomWord(wordList));
+        //Calling method newGame.
+        hangMan.newGame();
         //As long the amount of guesses is less then maxGuesses while-loop will run.
         while(hangMan.getGuessAmount() < hangMan.getMaxGuesses()){
-
-            //Print in console.
-            System.out.println("Enter a letter or guess the whole word.");
-
-            //Take user inputs and store it in playerGuess.
-            String playerGuess = scannerInput.nextLine();
-            //If player enter the whole word.
-
-            if(playerGuess.equalsIgnoreCase(hangMan.getGameWord())){
-                System.out.println("Congratz! You guessed the correct word! The word is: " + hangMan.getGameWord());
+            System.out.println("\nEnter a letter or guess the whole word.");
+            try{
+                //Take user inputs and store it in playerGuess.
+                playerGuess = scannerInput.nextLine().toLowerCase();
+                //A stupid but a simple way to see if if player guessed the whole word correct.
+                if(playerGuess.equalsIgnoreCase(hangMan.getGameWord())){
+                    System.out.println("Congrats! You won!");
+                    System.out.println("\nContinue by pressing enter....");
+                    //Make a break to study the result.
+                    scannerInput.nextLine();
+                    break;
+                }
+                //Keep only the first letter.
+                if(playerGuess.length() > 1){
+                    playerGuess = playerGuess.substring(0, 1);
+                }
+                //Call method inputPlayerGuess. Make this private by moving this method to runHangMan()
+                hangMan.inputPlayerGuess(playerGuess);
+                //Display current stats.
+                System.out.println("\n" + hangMan.wordFoundContent());
+                System.out.println("Your guessed letters: " + hangMan.getStringBuilder());
+                //Check if word is found.
+                if(hangMan.isWordFound()){
+                    System.out.println("Congrats! You won!");
+                    System.out.println("\nContinue by pressing enter....");
+                    //Make a break to study the result.
+                    scannerInput.nextLine();
+                    break;
+                }
+                else{
+                    //Display number tries remaining for the player.
+                    System.out.println("\nNumber of tries remaining " + (hangMan.getMaxGuesses() - hangMan.getGuessAmount()));
+                }
+            }catch (Exception e){
+                System.out.println("\nInvalid data. Please enter a letter or a word");
             }
-            else{
-                System.out.println("Sorry " + playerGuess + " is not the correct word!");
-                //Set guessAmount to increases with one.
-                hangMan.setGuessAmount();
-            }
-
-            //If player runs out of guesses this happens.
-            if(hangMan.getGuessAmount() == hangMan.getMaxGuesses()){
-                System.out.println("\nSorry! You lose!");
-                System.out.println("\nThe word you looking for is " + hangMan.getGameWord());
-            }
-
+        }
+        //If player runs out of guesses this happens.
+        if(hangMan.getGuessAmount() == hangMan.getMaxGuesses()) {
+            System.out.println("\nSorry! You lose!");
+            System.out.println("\nThe word you looking for is " + hangMan.getGameWord());
+            System.out.println("\nContinue by pressing enter....");
+            //Make a break to study the result.
+            scannerInput.nextLine();
         }
     }
 }
