@@ -5,8 +5,6 @@ import java.util.Scanner;
  * The game Hangman.
  * In this game you have to guess the correct word. You can guess the howl whole at once or just one letter at a time.
  * You have eight guesses and if you not come up with the word in eight guesses its GAME OVER.
- *
- * Author Oscar Johanneson.
  */
 public class App {
 
@@ -16,12 +14,10 @@ public class App {
     public static void main(String[] args)  {
 
         boolean keepRun = true;
-
         //As long keepRun is true the program will continue.
         while(keepRun) {
             //Call method printMenu
             printMenu();
-
             //Get input data from user. Choose between start application or quit.
             String startQuit = scannerInput.nextLine();
             switch (startQuit) {
@@ -47,8 +43,7 @@ public class App {
         System.out.print("Choice:");
     }
     //method to run HangMan Game.
-    public static void runHangMan(){
-
+    static void runHangMan(){
         //String array containing words that is going to be randomly picked.
         String[] wordList = {"Books", "Table", "Mirror", "Headphones", "Flower"};
         //Create String playerGuess to store input data from player using Scanner.
@@ -62,13 +57,15 @@ public class App {
         //As long the amount of guesses is less then maxGuesses while-loop will run.
         while(hangMan.getGuessAmount() < hangMan.getMaxGuesses()){
             System.out.println("\nEnter a letter or guess the whole word.");
+            //print out charArray wordToGuess to give the player a hint on amount of number gameWord contains.
+            System.out.println("\n" + hangMan.wordFoundContent());
             try{
                 //Take user inputs and store it in playerGuess.
                 playerGuess = scannerInput.nextLine().toLowerCase();
-                //A stupid but a simple way to see if if player guessed the whole word correct.
+                //A stupid but a simple way to see if player guessed the whole word correct.
                 if(playerGuess.equalsIgnoreCase(hangMan.getGameWord())){
-                    System.out.println("Congrats! You won!");
-                    System.out.println("\nContinue by pressing enter....");
+                    System.out.println("\nYou won!\t" + " The word was ---> " + hangMan.getGameWord() + " <---");
+                    System.out.println("Continue by pressing enter....");
                     //Make a break to study the result.
                     scannerInput.nextLine();
                     break;
@@ -77,21 +74,20 @@ public class App {
                 if(playerGuess.length() > 1){
                     playerGuess = playerGuess.substring(0, 1);
                 }
-                //Call method inputPlayerGuess. Make this private by moving this method to runHangMan()
+                //Call method inputPlayerGuess.
                 hangMan.inputPlayerGuess(playerGuess);
-                //Display current stats.
+                //Display current stats for the player using charArray wordToGuess.
                 System.out.println("\n" + hangMan.wordFoundContent());
                 System.out.println("Your guessed letters: " + hangMan.getStringBuilder());
-                //Check if word is found.
+                //Checking if word is found.
                 if(hangMan.isWordFound()){
-                    System.out.println("Congrats! You won!");
-                    System.out.println("\nContinue by pressing enter....");
+                    System.out.println("\nYou won!\t" + " The word was ---> " + hangMan.getGameWord() + " <---");
+                    System.out.println("Continue by pressing enter....");
                     //Make a break to study the result.
                     scannerInput.nextLine();
                     break;
-                }
-                else{
-                    //Display number tries remaining for the player.
+                }else{
+                    //Display number of tries remaining for the player.
                     System.out.println("\nNumber of tries remaining " + (hangMan.getMaxGuesses() - hangMan.getGuessAmount()));
                 }
             }catch (Exception e){
@@ -99,8 +95,8 @@ public class App {
             }
         }
         //If player runs out of guesses this happens.
-        if(hangMan.getGuessAmount() == hangMan.getMaxGuesses()) {
-            System.out.println("\nSorry! You lose!");
+        if(hangMan.getGuessAmount() == hangMan.getMaxGuesses()){
+            System.out.println("\nGAME OVER! You lose!");
             System.out.println("\nThe word you looking for is " + hangMan.getGameWord());
             System.out.println("\nContinue by pressing enter....");
             //Make a break to study the result.

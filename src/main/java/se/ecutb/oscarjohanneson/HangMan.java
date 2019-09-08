@@ -9,12 +9,12 @@ public class HangMan {
     private int maxGuesses;     //Amount of guesses player have until game over. Set to 8 by the constructor.
     private char[] wordToGuess; //Char array that is later used to store the gameWord, letter by letter.
     private StringBuilder stringBuilder = new StringBuilder();
-    private ArrayList<String> letters = new ArrayList<>();  //A list of Letters that's stored from user input.
+    private ArrayList<String> letters = new ArrayList<>();  //A list of Letters that's stored from user input. Used to check if letter already been guessed.
     //constructor.
     public HangMan(String gameWord) {
         this.gameWord = gameWord;
         this.guessAmount = 1;   //Starting guessAmount on 1.
-        this.maxGuesses = 8;    //Player has 8 Guesses before game over.
+        this.maxGuesses = 8;    //Player has 8 guesses before game over.
         this.stringBuilder = stringBuilder;
         this.wordToGuess = wordToGuess;
         this.letters = letters;
@@ -32,17 +32,20 @@ public class HangMan {
     public StringBuilder getStringBuilder() {
         return stringBuilder;
     }
-    //Method to start a new game. This will make the game restore guessAmount to 1 and clear ArrayList.
+    public char[] getWordToGuess() {
+        return wordToGuess;
+    }
+    //Method to start a new game.
     public void newGame(){
         //clear ArrayList letter.
         letters.clear();
-        //Create a new char from gameWord
+        //Create a new char whit the length of gameWord. Set every char to _ in array.
         wordToGuess = new char[gameWord.length()];
         for(int i = 0; i < wordToGuess.length; i++){
             wordToGuess[i] = '_';
         }
     }
-    //Compare if _ is equal to our gameWord.
+    //Compare if all guessed '_' is equal to our gameWord.
     public boolean isWordFound(){
         return gameWord.contentEquals(new String(wordToGuess));
     }
@@ -68,7 +71,7 @@ public class HangMan {
                 //If it does, _ replaces with character from input.
                 int index = gameWord.indexOf(guessInput);
                 //print input data from user.
-                stringBuilder.append(" " + guessInput +" ");
+                stringBuilder.append(" " + guessInput + " ");
                 while(index >= 0){
                     wordToGuess[index] = guessInput.charAt(0);
                     index = gameWord.indexOf(guessInput, index + 1);
@@ -76,7 +79,7 @@ public class HangMan {
             } else{
                 //If input is not in the word.
                 guessAmount++;
-                stringBuilder.append(" "+ guessInput + " ");
+                stringBuilder.append(" " + guessInput + " ");
             }
             //Add input to Array letters.
             letters.add(guessInput);
